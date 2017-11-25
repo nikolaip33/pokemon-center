@@ -5,7 +5,7 @@ class PokedexController < ApplicationController
     end
 
     get '/safari' do
-        @pokemon = PokemonBase.find_or_create_from_api(rand(1..801))
+        @pokemon = PokemonBase.find_by(id: rand(1..801))
         erb :"/pokedex/safari"
     end
 
@@ -18,7 +18,7 @@ class PokedexController < ApplicationController
             flash[:danger] = "Failure! We could not find that Pokédex Entry."
             redirect "/pokedex/page/1"
         else
-            @pokemon = PokemonBase.find_or_create_from_api(params[:id])
+            @pokemon = PokemonBase.find_by(id: params[:id])
             erb :"/pokedex/show"
         end
     end
