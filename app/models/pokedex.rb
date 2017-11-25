@@ -1,30 +1,12 @@
 class Pokedex
 
-    attr_accessor :page, :pokemon
-    
-    WHITELIST = [
-        "ho-oh",
-        "jangmo-o",
-        "hakamo-o",
-        "kommo-o",
-        "tapu-koko",
-        "tapu-lele",
-        "tapu-bulu",
-        "tapu-fini",
-        "type-null",
-        "porygon-z",
-        "mime-jr",
-        "mr-mime"
-    ]
+    attr_accessor :page, :pokemon, :index
 
     def initialize(page)
         @page = page.to_i
-        path = "http://pokeapi.co/api/v2/pokemon/#{paginate(self.page.to_i)}"
-        @pokemon = JSON.parse(RestClient.get(path, headers={}))["results"]
-    end
-
-    def validate
-        self.pokemon.collect { |p| WHITELIST.include?(p["name"]) ? p["name"] : p["name"].split("-").first }
+        @index = ((@page-1)*20)+1
+        range = @page != 40 ? (@index..@index + 19).to_a : (@index..@index + 20).to_a 
+        @pokemon = PokemonBase.find(range)
     end
 
     def create_nav
@@ -67,14 +49,4 @@ class Pokedex
         a
     end
 
-    def index
-        ((@page-1)*20)+1
-    end
-
-end
-
-def paginate(n)
-    offset = (n.to_i-1)*20
-    limit = offset == 780 ? 21 : 20
-    "?limit=#{limit}&offset=#{offset}"
 end

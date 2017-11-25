@@ -41,12 +41,12 @@
 </div>  
 
 <div class="row">
-    <% @pokelist.each.with_index(@index) do |pokemon, i| %>
+    <% @pokelist.each do |pokemon| %>
     <div class="col-sm-3 col-xs-6  poke-grid text-center">
-        <a href="/pokedex/pokemon/<%=i%>">
+        <a href="/pokedex/pokemon/<%=pokemon.id%>">
             <div class="inner">
-                <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/<%=img_index(i)%>.png">
-                <%= pokemon.capitalize %><br><%=img_index(i)%></p>
+                <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/<%=img_index(pokemon.id)%>.png">
+                <%= pokemon.name.capitalize %><br><%=img_index(pokemon.id)%></p>
             </div>
         </a>
     </div>

@@ -23,29 +23,12 @@ class PokedexController < ApplicationController
         end
     end
 
-    post '/pokedex/pokemon/:id' do
-        if logged_in?
-            if current_user.pokeballs > 0
-                current_user.update_attribute(:pokeballs, current_user.pokeballs - 1)
-                @pokemon = Pokemon.create_from_base(params[:id], current_user)
-                flash[:success] = "Success! #{@pokemon.name.capitalize} was successfully caught."
-                redirect "/pokemon/#{@pokemon.id}"
-            else
-                flash[:danger] = "Failure! You do not have any Pokéballs."
-                redirect "/pokedex/pokemon/#{params[:id]}"
-            end
-        else
-            "Failure! You are not signed in."
-            redirect "/sign-in"
-        end
-    end
-
     get '/pokedex/page/:page' do
         if params[:page].to_i.between?(1,40)
             @pokedex = Pokedex.new(params[:page].to_i)
             @index = @pokedex.index
             @active = @pokedex.page
-            @pokelist = @pokedex.validate
+            @pokelist = @pokedex.pokemon
             @navlinks = @pokedex.create_nav
             erb :"/pokedex/page"
         elsif params[:page].to_i <= 0
